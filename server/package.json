@@ -1,0 +1,40 @@
+{
+  "name": "@slexisvn/petahub-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "petahub API: publish, yank, ownership, search.",
+  "license": "MIT",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "nest build",
+    "dev": "nest start --watch",
+    "start": "node dist/main.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "prisma:generate": "prisma generate",
+    "prisma:push": "prisma db push"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/config": "^4.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/platform-express": "^11.0.0",
+    "@prisma/client": "^6.0.0",
+    "@slexisvn/peta": "file:../../peta",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.0",
+    "@nestjs/testing": "^11.0.0",
+    "@swc/core": "^1.10.0",
+    "@types/express": "^5.0.0",
+    "@types/node": "^26.1.1",
+    "@types/supertest": "^6.0.2",
+    "prisma": "^6.0.0",
+    "supertest": "^7.0.0",
+    "typescript": "^5.9.3",
+    "unplugin-swc": "^1.5.1",
+    "vitest": "^4.1.8"
+  }
+}

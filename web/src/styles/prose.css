@@ -1,0 +1,148 @@
+.prose {
+  max-width: var(--width-prose);
+  line-height: var(--leading-normal);
+  overflow-wrap: break-word;
+}
+
+.prose > * + * {
+  margin-top: var(--space-4);
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  margin-top: var(--space-6);
+  scroll-margin-top: calc(var(--header-height) + var(--space-4));
+}
+
+.prose > :first-child {
+  margin-top: 0;
+}
+
+.prose h1 {
+  font-size: var(--text-lg);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.prose h2 {
+  font-size: var(--text-md);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.prose h3 {
+  font-size: var(--text-base);
+}
+
+.prose h4,
+.prose h5,
+.prose h6 {
+  font-size: var(--text-sm);
+  color: var(--fg-muted);
+}
+
+.prose ul,
+.prose ol {
+  padding-left: var(--space-5);
+}
+
+.prose li + li {
+  margin-top: var(--space-2);
+}
+
+.prose li::marker {
+  color: var(--fg-subtle);
+}
+
+.prose code {
+  padding: 0.1em 0.35em;
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.875em;
+}
+
+.prose pre {
+  padding: var(--space-4);
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  line-height: var(--leading-snug);
+}
+
+.prose pre code {
+  padding: 0;
+  background: none;
+  border: 0;
+  font-size: var(--text-sm);
+}
+
+.prose blockquote {
+  padding-left: var(--space-4);
+  border-left: 3px solid var(--accent-border);
+  color: var(--fg-muted);
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  display: block;
+  overflow-x: auto;
+}
+
+.prose th,
+.prose td {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  text-align: left;
+}
+
+.prose th {
+  background: var(--bg-sunken);
+  font-weight: var(--weight-semibold);
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+.prose img {
+  border-radius: var(--radius-md);
+}
+
+.prose a {
+  font-weight: var(--weight-medium);
+}
+
+.tok-keyword {
+  color: var(--syntax-keyword);
+  font-weight: var(--weight-medium);
+}
+
+.tok-string {
+  color: var(--syntax-string);
+}
+
+.tok-number {
+  color: var(--syntax-number);
+}
+
+.tok-comment {
+  color: var(--syntax-comment);
+  font-style: italic;
+}
+
+.tok-function {
+  color: var(--syntax-function);
+}
+
+.tok-punctuation {
+  color: var(--syntax-punctuation);
+}

@@ -1,0 +1,180 @@
+:root {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", "Cascadia Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.9375rem;
+  --text-md: 1.0625rem;
+  --text-lg: 1.375rem;
+  --text-xl: 1.75rem;
+  --text-2xl: 2.25rem;
+  --text-3xl: 3rem;
+
+  --leading-tight: 1.2;
+  --leading-snug: 1.4;
+  --leading-normal: 1.65;
+
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 999px;
+
+  --width-page: 68rem;
+  --width-prose: 46rem;
+  --header-height: 3.5rem;
+
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration: 150ms;
+
+  --violet-50: #f2f1fe;
+  --violet-100: #e6e3fd;
+  --violet-200: #cdc7fb;
+  --violet-300: #a99ff6;
+  --violet-400: #8b7bf0;
+  --violet-500: #6d5ae6;
+  --violet-600: #5a44cf;
+  --violet-700: #4a37ab;
+  --violet-800: #3c2d89;
+  --violet-900: #2b2063;
+
+  --slate-0: #ffffff;
+  --slate-25: #fbfbfd;
+  --slate-50: #f6f6f9;
+  --slate-100: #eceef3;
+  --slate-200: #dde0e8;
+  --slate-300: #c3c8d4;
+  --slate-400: #949bad;
+  --slate-500: #646b7d;
+  --slate-600: #4e5466;
+  --slate-700: #383d4c;
+  --slate-800: #262a36;
+  --slate-850: #1d212b;
+  --slate-900: #161922;
+  --slate-950: #0f1117;
+
+  --amber-100: #fdf0d5;
+  --amber-200: #f8dfae;
+  --amber-500: #b3720a;
+  --amber-600: #8a5606;
+  --amber-400: #e0a336;
+
+  --green-100: #dcf5e6;
+  --green-500: #116639;
+  --green-400: #3fbe78;
+
+  --red-100: #fbe2e2;
+  --red-500: #c02b2b;
+  --red-400: #f07272;
+
+  color-scheme: light;
+
+  --bg: var(--slate-25);
+  --bg-raised: var(--slate-0);
+  --bg-sunken: var(--slate-50);
+  --bg-code: var(--slate-50);
+  --bg-hover: var(--slate-100);
+  --bg-active: var(--slate-200);
+
+  --fg: var(--slate-900);
+  --fg-muted: var(--slate-600);
+  --fg-subtle: var(--slate-500);
+  --fg-inverted: var(--slate-0);
+
+  --border: var(--slate-200);
+  --border-strong: var(--slate-300);
+
+  --accent: var(--violet-600);
+  --accent-hover: var(--violet-700);
+  --accent-fg: var(--slate-0);
+  --accent-soft: var(--violet-50);
+  --accent-border: var(--violet-200);
+
+  --warn-fg: var(--amber-600);
+  --warn-soft: var(--amber-100);
+  --warn-border: var(--amber-200);
+
+  --good-fg: var(--green-500);
+  --good-soft: var(--green-100);
+
+  --bad-fg: var(--red-500);
+  --bad-soft: var(--red-100);
+  --bad-border: #f3c6c6;
+
+  --focus-ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
+  --shadow-sm: 0 1px 2px rgb(16 18 26 / 0.05);
+  --shadow-md: 0 2px 4px rgb(16 18 26 / 0.05), 0 6px 16px rgb(16 18 26 / 0.06);
+  --shadow-lg: 0 8px 32px rgb(16 18 26 / 0.12);
+
+  --skeleton: linear-gradient(90deg, var(--bg-sunken), var(--bg-hover), var(--bg-sunken));
+
+  --syntax-keyword: var(--violet-600);
+  --syntax-string: #0a7a5c;
+  --syntax-number: #a8560d;
+  --syntax-comment: var(--slate-500);
+  --syntax-function: #1a5fb4;
+  --syntax-punctuation: var(--slate-600);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: var(--slate-950);
+  --bg-raised: var(--slate-900);
+  --bg-sunken: var(--slate-850);
+  --bg-code: #12151d;
+  --bg-hover: var(--slate-800);
+  --bg-active: var(--slate-700);
+
+  --fg: #e8eaf0;
+  --fg-muted: var(--slate-300);
+  --fg-subtle: var(--slate-400);
+  --fg-inverted: var(--slate-950);
+
+  --border: #262b38;
+  --border-strong: var(--slate-700);
+
+  --accent: var(--violet-300);
+  --accent-hover: var(--violet-200);
+  --accent-fg: var(--slate-950);
+  --accent-soft: rgb(109 90 230 / 0.16);
+  --accent-border: rgb(109 90 230 / 0.42);
+
+  --warn-fg: var(--amber-400);
+  --warn-soft: rgb(224 163 54 / 0.14);
+  --warn-border: rgb(224 163 54 / 0.36);
+
+  --good-fg: var(--green-400);
+  --good-soft: rgb(63 190 120 / 0.14);
+
+  --bad-fg: var(--red-400);
+  --bad-soft: rgb(240 114 114 / 0.14);
+  --bad-border: rgb(240 114 114 / 0.36);
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-md: 0 2px 4px rgb(0 0 0 / 0.25), 0 6px 16px rgb(0 0 0 / 0.35);
+  --shadow-lg: 0 8px 32px rgb(0 0 0 / 0.5);
+
+  --syntax-keyword: var(--violet-300);
+  --syntax-string: #6cd0a8;
+  --syntax-number: #e0a878;
+  --syntax-comment: var(--slate-400);
+  --syntax-function: #7ab6f5;
+  --syntax-punctuation: var(--slate-300);
+}

@@ -1,0 +1,11 @@
+node_modules
+dist/
+coverage
+*.db
+*.db-journal
+.env
+.env.local
+storage/
+
+# local demo data, never commit
+server/.demo/

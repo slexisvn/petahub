@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id        String   @id @default(cuid())
+  githubId  String   @unique
+  login     String   @unique
+  name      String?
+  avatarUrl String?
+  createdAt DateTime @default(now())
+
+  tokens   Token[]
+  scopes   Scope[]
+  releases Release[]
+}
+
+model Token {
+  id         String    @id @default(cuid())
+  accountId  String
+  label      String
+  hash       String    @unique
+  createdAt  DateTime  @default(now())
+  lastUsedAt DateTime?
+  revokedAt  DateTime?
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId])
+}
+
+model Scope {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  ownerId   String
+  createdAt DateTime @default(now())
+
+  owner    Account   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  packages Package[]
+
+  @@index([ownerId])
+}
+
+model Package {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  scopeName   String
+  description String?
+  repository  String?
+  readme      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  scope    Scope     @relation(fields: [scopeName], references: [name], onDelete: Cascade)
+  releases Release[]
+
+  @@index([scopeName])
+}
+
+model Release {
+  id           String   @id @default(cuid())
+  packageId    String
+  version      String
+  integrity    String
+  archivePath  String
+  bytes        Int
+  fileCount    Int
+  dependencies String
+  yanked       Boolean  @default(false)
+  downloads    Int      @default(0)
+  publishedAt  DateTime @default(now())
+  publishedById String
+
+  package     Package @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  publishedBy Account @relation(fields: [publishedById], references: [id])
+
+  @@unique([packageId, version])
+  @@index([packageId])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  accountId String
+  hash      String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([accountId])
+}
