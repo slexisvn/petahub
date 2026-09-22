@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { Release } from "../../src/api";
 import { byVersionDescending, latestRelease, totalDownloads } from "../../src/lib/releases";
+import type { Release } from "../../src/models";
 
 function release(version: string, options: Partial<Release> = {}): Release {
   return {

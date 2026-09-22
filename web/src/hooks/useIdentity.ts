@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { whoami, type Identity } from "../api";
+import { whoami } from "../api";
+import type { Identity } from "../models";
 
 export type IdentityState = {
   readonly identity: Identity | null;

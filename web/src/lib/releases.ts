@@ -1,5 +1,5 @@
 import { compareVersion, isPrerelease, tryParseVersion } from "@slexisvn/peta/browser";
-import type { Release } from "../api";
+import type { Release } from "../models";
 
 export function compareReleases(left: Release, right: Release): number {
   const a = tryParseVersion(left.version);

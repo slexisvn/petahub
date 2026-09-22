@@ -1,55 +1,45 @@
-export type SearchHit = {
-  readonly name: string;
-  readonly description: string | null;
-  readonly latest: string | null;
-  readonly downloads: number;
-  readonly updatedAt: string;
-};
+import { endpoints } from "./api/endpoints";
+import type {
+  ClaimedScopeDto,
+  CreatedTokenDto,
+  DependentsResultDto,
+  IdentityDto,
+  PackageDetailDto,
+  SearchResultDto,
+  TokenListDto
+} from "./api/dto";
+import {
+  mapClaimedScope,
+  mapCreatedToken,
+  mapDependentsResult,
+  mapIdentity,
+  mapPackageDetail,
+  mapSearchResult,
+  mapTokenList
+} from "./api/mappers";
+import type {
+  ClaimedScope,
+  CreatedToken,
+  DependentsResult,
+  Identity,
+  PackageDetail,
+  SearchResult,
+  TokenList
+} from "./models";
 
-export type Release = {
-  readonly version: string;
-  readonly integrity: string;
-  readonly archive: string;
-  readonly bytes: number;
-  readonly files: number;
-  readonly dependencies: Record<string, string>;
-  readonly yanked: boolean;
-  readonly downloads: number;
-  readonly publishedAt: string;
-  readonly publishedBy: string;
-};
-
-export type PackageDetail = {
-  readonly name: string;
-  readonly description: string | null;
-  readonly repository: string | null;
-  readonly readme: string | null;
-  readonly owner: string;
-  readonly scope: string;
-  readonly createdAt: string;
-  readonly releases: readonly Release[];
-};
-
-export type Dependent = {
-  readonly name: string;
-  readonly description: string | null;
-  readonly version: string;
-  readonly range: string;
-};
-
-export type Identity = {
-  readonly login: string;
-  readonly name: string | null;
-  readonly avatarUrl: string | null;
-  readonly scopes: readonly string[];
-};
-
-export type TokenSummary = {
-  readonly id: string;
-  readonly label: string;
-  readonly createdAt: string;
-  readonly lastUsedAt: string | null;
-};
+export type {
+  ClaimedScope,
+  CreatedToken,
+  Dependent,
+  DependentsResult,
+  Identity,
+  PackageDetail,
+  Release,
+  SearchHit,
+  SearchResult,
+  TokenList,
+  TokenSummary
+} from "./models";
 
 export class ApiError extends Error {
   constructor(
@@ -97,46 +87,54 @@ async function call<T>(path: string, init: RequestInit = {}): Promise<T> {
   return (text.length === 0 ? {} : JSON.parse(text)) as T;
 }
 
-export function searchPackages(query: string): Promise<{ packages: SearchHit[] }> {
-  const suffix = query.length === 0 ? "" : `?q=${encodeURIComponent(query)}`;
-  return call(`/api/v1/packages${suffix}`);
+export async function searchPackages(query: string): Promise<SearchResult> {
+  return mapSearchResult(await call<SearchResultDto>(endpoints.packages(query)));
 }
 
-export function packageDetail(name: string): Promise<PackageDetail> {
-  return call(`/api/v1/packages/${encodeURIComponent(name)}`);
+export async function packageDetail(name: string): Promise<PackageDetail> {
+  return mapPackageDetail(await call<PackageDetailDto>(endpoints.packageDetail(name)));
 }
 
-export function packageDependents(name: string): Promise<{ dependents: Dependent[] }> {
-  return call(`/api/v1/packages/${encodeURIComponent(name)}/dependents`);
+export async function packageDependents(name: string): Promise<DependentsResult> {
+  return mapDependentsResult(await call<DependentsResultDto>(endpoints.packageDependents(name)));
 }
 
-export function whoami(): Promise<Identity> {
-  return call("/api/v1/auth/whoami");
+export async function whoami(): Promise<Identity> {
+  return mapIdentity(await call<IdentityDto>(endpoints.whoami()));
 }
 
 export function logout(): Promise<unknown> {
-  return call("/api/v1/auth/logout", { method: "POST" });
+  return call(endpoints.logout(), { method: "POST" });
 }
 
-export function listTokens(): Promise<{ tokens: TokenSummary[] }> {
-  return call("/api/v1/auth/tokens");
+export async function listTokens(): Promise<TokenList> {
+  return mapTokenList(await call<TokenListDto>(endpoints.tokens()));
 }
 
-export function createToken(label: string): Promise<{ id: string; label: string; token: string }> {
-  return call("/api/v1/auth/tokens", { method: "POST", body: JSON.stringify({ label }) });
+export async function createToken(label: string): Promise<CreatedToken> {
+  return mapCreatedToken(
+    await call<CreatedTokenDto>(endpoints.tokens(), {
+      method: "POST",
+      body: JSON.stringify({ label })
+    })
+  );
 }
 
 export function revokeToken(id: string): Promise<unknown> {
-  return call(`/api/v1/auth/tokens/${id}`, { method: "DELETE" });
+  return call(endpoints.token(id), { method: "DELETE" });
 }
 
-export function claimScope(name: string): Promise<{ name: string }> {
-  return call("/api/v1/scopes", { method: "POST", body: JSON.stringify({ name }) });
+export async function claimScope(name: string): Promise<ClaimedScope> {
+  return mapClaimedScope(
+    await call<ClaimedScopeDto>(endpoints.scopes(), {
+      method: "POST",
+      body: JSON.stringify({ name })
+    })
+  );
 }
 
 export function archiveUrl(archive: string): string {
-  return apiUrl(`/${archive}`);
+  return apiUrl(endpoints.packageArchive(archive));
 }
 
-export const SIGN_IN_URL = apiUrl("/api/v1/auth/github");
-export const SEARCH_LIMIT = 50;
+export const SIGN_IN_URL = apiUrl(endpoints.signIn());

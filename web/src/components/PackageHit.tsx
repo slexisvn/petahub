@@ -1,9 +1,9 @@
 import type { JSX } from "react";
 import { Link } from "react-router";
-import type { SearchHit } from "../api";
 import { formatCount, formatExactCount, pluralise } from "../lib/format";
 import { isPrereleaseVersion } from "../lib/releases";
 import { packagePath } from "../lib/routes";
+import type { SearchHit } from "../models";
 import { PackageName } from "./PackageName";
 import { RelativeTime } from "./RelativeTime";
 

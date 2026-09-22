@@ -1,9 +1,9 @@
 import type { JSX } from "react";
 import { Link } from "react-router";
-import type { Release } from "../api";
 import { formatBytes, formatCount, pluralise } from "../lib/format";
 import { isPrereleaseVersion } from "../lib/releases";
 import { versionPath } from "../lib/routes";
+import type { Release } from "../models";
 import { RelativeTime } from "./RelativeTime";
 
 type Props = {

@@ -1,8 +1,9 @@
 import type { JSX } from "react";
 import { NavLink, useNavigate } from "react-router";
 import { useState } from "react";
-import { SIGN_IN_URL, logout, type Identity } from "../api";
+import { SIGN_IN_URL, logout } from "../api";
 import { searchPath } from "../lib/routes";
+import type { Identity } from "../models";
 import { Brand } from "./Brand";
 import { Icon } from "./Icon";
 import { SearchBox } from "./SearchBox";

@@ -86,6 +86,7 @@ export class PackagesController {
       include: { releases: { where: { yanked: false }, orderBy: { publishedAt: "desc" } } }
     });
     return {
+      limit: SEARCH_LIMIT,
       packages: packages.map((entry) => ({
         name: entry.name,
         description: entry.description,

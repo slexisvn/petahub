@@ -6,9 +6,7 @@ import {
   createToken,
   listTokens,
   messageOf,
-  revokeToken,
-  type Identity,
-  type TokenSummary
+  revokeToken
 } from "../api";
 import { EmptyState, Notice, Skeleton } from "../components/Feedback";
 import { Icon } from "../components/Icon";
@@ -17,6 +15,7 @@ import { Snippet } from "../components/Snippet";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { scopePath } from "../lib/routes";
 import { CLIENT_NAME, EXAMPLE_PACKAGE, EXAMPLE_SCOPE, EXAMPLE_SIBLING } from "../lib/site";
+import type { Identity, TokenSummary } from "../models";
 import { Link } from "react-router";
 
 type Props = {

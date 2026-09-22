@@ -1,7 +1,7 @@
 import type { JSX } from "react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
-import { SEARCH_LIMIT, messageOf, searchPackages, type SearchHit } from "../api";
+import { messageOf, searchPackages } from "../api";
 import { EmptyState, Notice, SkeletonList } from "../components/Feedback";
 import { PackageHit } from "../components/PackageHit";
 import { SearchBox } from "../components/SearchBox";
@@ -10,6 +10,7 @@ import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { formatExactCount, pluralise } from "../lib/format";
 import { SEARCH_QUERY_PARAM, SEARCH_SORT_PARAM } from "../lib/routes";
 import { CLIENT_NAME } from "../lib/site";
+import type { SearchHit } from "../models";
 
 const DEBOUNCE_MS = 150;
 
@@ -59,7 +60,8 @@ export function SearchPage(): JSX.Element {
 
   const { data, error, loading } = useAsync(() => searchPackages(query), [query]);
   const hits = data === null ? [] : [...data.packages].sort(sort.compare);
-  const atLimit = hits.length === SEARCH_LIMIT;
+  const limit = data?.limit ?? null;
+  const atLimit = limit !== null && hits.length === limit;
 
   return (
     <div className="page">
@@ -138,7 +140,7 @@ export function SearchPage(): JSX.Element {
           </div>
           {atLimit ? (
             <p className="small muted" style={{ marginTop: "1rem" }}>
-              Showing the first {SEARCH_LIMIT} matches. Narrow the search to see more.
+              Showing the first {limit} matches. Narrow the search to see more.
             </p>
           ) : null}
         </>
