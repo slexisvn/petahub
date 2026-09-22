@@ -8,6 +8,9 @@
   "scripts": {
     "build": "nest build",
     "dev": "nest start --watch",
+    "prebuild": "prisma generate",
+    "pretest": "prisma generate",
+    "pretypecheck": "prisma generate",
     "start": "node dist/main.js",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

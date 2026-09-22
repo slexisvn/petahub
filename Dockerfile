@@ -14,7 +14,6 @@ WORKDIR /app
 
 COPY server server
 
-RUN npm run prisma:generate --workspace server
 RUN npm run build --workspace server
 RUN npm prune --omit=dev
 
