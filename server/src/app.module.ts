@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
 import { AccountsService } from "./accounts/accounts.service";
 import { ScopesService } from "./accounts/scopes.service";
 import { AuthController } from "./auth/auth.controller";
@@ -13,7 +14,10 @@ import { PrismaModule } from "./prisma/prisma.module";
 import { StorageService } from "./storage/storage.service";
 
 @Module({
-  imports: [PrismaModule],
+  imports: [
+    ConfigModule.forRoot({ envFilePath: [".env", "server/.env"], isGlobal: true }),
+    PrismaModule
+  ],
   controllers: [AuthController, PackagesController, StaticController],
   providers: [
     { provide: CONFIG, useFactory: () => loadConfig() },

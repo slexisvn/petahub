@@ -7,9 +7,12 @@ import "./styles/index.css";
 const container = document.getElementById("root");
 if (container === null) throw new Error("no #root element to mount into");
 
+const basename =
+  import.meta.env.BASE_URL === "/" ? undefined : import.meta.env.BASE_URL.replace(/\/$/, "");
+
 createRoot(container).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <App />
     </BrowserRouter>
   </StrictMode>

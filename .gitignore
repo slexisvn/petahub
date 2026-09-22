@@ -5,7 +5,7 @@ coverage
 *.db-journal
 .env
 .env.local
-storage/
+/storage/
 
 # local demo data, never commit
 server/.demo/

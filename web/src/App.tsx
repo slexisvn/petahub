@@ -1,9 +1,7 @@
 import type { JSX } from "react";
 import { Route, Routes, useLocation } from "react-router";
-import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 import { useIdentity } from "./hooks/useIdentity";
-import { AboutPage } from "./pages/About";
 import { AccountPage } from "./pages/Account";
 import { HomePage } from "./pages/Home";
 import { NotFoundPage } from "./pages/NotFound";
@@ -32,7 +30,6 @@ export function App(): JSX.Element {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
-          <Route path="/about" element={<AboutPage />} />
           <Route path="/packages/:name" element={<PackagePage />} />
           <Route path="/packages/:name/:version" element={<VersionPage />} />
           <Route
@@ -42,7 +39,6 @@ export function App(): JSX.Element {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
-      <Footer />
     </>
   );
 }

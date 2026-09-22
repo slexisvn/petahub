@@ -3,6 +3,7 @@ import { defineConfig, type Plugin } from "vitest/config";
 import { bootScript } from "./src/lib/theme-config";
 
 const api = process.env.HUB_URL ?? "http://localhost:4400";
+const base = process.env.BASE_PATH?.trim() || "/";
 const PROXIED_PREFIXES = ["/api", "/index", "/pkg"];
 const DEV_PORT = 5173;
 
@@ -16,6 +17,7 @@ function themeBoot(): Plugin {
 }
 
 export default defineConfig({
+  base,
   plugins: [react(), themeBoot()],
   server: {
     port: DEV_PORT,

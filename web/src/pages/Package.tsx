@@ -12,7 +12,6 @@ import { Snippet } from "../components/Snippet";
 import { useAsync } from "../hooks/useAsync";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { formatBytes, formatCount, formatDate, pluralise } from "../lib/format";
-import { PLANNED_COMPATIBILITY } from "../lib/guarantees";
 import { byVersionDescending, caretRange, latestRelease, totalDownloads } from "../lib/releases";
 import { packagePath, scopePath, versionPath } from "../lib/routes";
 import { CLIENT_NAME } from "../lib/site";
@@ -359,20 +358,6 @@ export function PackagePage(): JSX.Element {
                   </MetaItem>
                 </>
               )}
-            </div>
-          </div>
-
-          <div className="card aside-card">
-            <h2 className="aside-card__title">Compatibility</h2>
-            <p className="small muted" style={{ marginBottom: "0.75rem" }}>
-              Computed by the hub, never declared by the author. Not yet measured.
-            </p>
-            <div className="row" style={{ gap: "0.5rem" }}>
-              {PLANNED_COMPATIBILITY.map((label) => (
-                <span key={label} className="badge badge--planned">
-                  {label} —
-                </span>
-              ))}
             </div>
           </div>
         </aside>

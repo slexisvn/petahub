@@ -3,13 +3,11 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { messageOf, searchPackages } from "../api";
 import { EmptyState, SkeletonList } from "../components/Feedback";
-import { Icon } from "../components/Icon";
 import { PackageHit } from "../components/PackageHit";
 import { SearchBox } from "../components/SearchBox";
 import { Snippet } from "../components/Snippet";
 import { useAsync } from "../hooks/useAsync";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
-import { GUARANTEES } from "../lib/guarantees";
 import { searchPath } from "../lib/routes";
 import { CLIENT_NAME, LANGUAGE_NAME } from "../lib/site";
 
@@ -61,21 +59,6 @@ export function HomePage(): JSX.Element {
             />
           </div>
         )}
-      </section>
-
-      <section aria-labelledby="guarantees-heading">
-        <h2 id="guarantees-heading" className="visually-hidden">
-          What this registry guarantees
-        </h2>
-        <div className="guarantees">
-          {GUARANTEES.map((guarantee) => (
-            <article key={guarantee.title} className="guarantee">
-              <Icon name={guarantee.icon} className="guarantee__icon" />
-              <h3 className="guarantee__title">{guarantee.title}</h3>
-              <p className="guarantee__body">{guarantee.body}</p>
-            </article>
-          ))}
-        </div>
       </section>
 
       <section className="section" aria-labelledby="recent-heading">
