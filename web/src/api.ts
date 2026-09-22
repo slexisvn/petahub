@@ -70,8 +70,14 @@ export function isNotFound(issue: unknown): boolean {
   return issue instanceof ApiError && issue.status === NOT_FOUND_STATUS;
 }
 
+const API_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, "") ?? "";
+
+function apiUrl(path: string): string {
+  return `${API_URL}${path}`;
+}
+
 async function call<T>(path: string, init: RequestInit = {}): Promise<T> {
-  const response = await fetch(path, {
+  const response = await fetch(apiUrl(path), {
     credentials: "include",
     headers: init.body === undefined ? {} : { "content-type": "application/json" },
     ...init
@@ -129,8 +135,8 @@ export function claimScope(name: string): Promise<{ name: string }> {
 }
 
 export function archiveUrl(archive: string): string {
-  return `/${archive}`;
+  return apiUrl(`/${archive}`);
 }
 
-export const SIGN_IN_URL = "/api/v1/auth/github";
+export const SIGN_IN_URL = apiUrl("/api/v1/auth/github");
 export const SEARCH_LIMIT = 50;

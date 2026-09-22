@@ -21,6 +21,7 @@
     "@nestjs/platform-express": "^11.0.0",
     "@prisma/client": "^6.0.0",
     "@slexisvn/peta": "^0.1.1",
+    "prisma": "^6.19.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
@@ -31,7 +32,6 @@
     "@types/express": "^5.0.0",
     "@types/node": "^26.1.1",
     "@types/supertest": "^6.0.2",
-    "prisma": "^6.0.0",
     "supertest": "^7.0.0",
     "typescript": "^5.9.3",
     "unplugin-swc": "^1.5.1",

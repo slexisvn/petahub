@@ -35,6 +35,7 @@ jobs:
         run: npm run build --workspace web
         env:
           BASE_PATH: /${{ github.event.repository.name }}/
+          VITE_API_URL: https://slexisvn-petahub.fly.dev
 
       - name: Add SPA fallback
         run: cp web/dist/index.html web/dist/404.html

@@ -10,7 +10,16 @@ let hub: ChildProcess;
 let hubUrl: string;
 let token: string;
 
-const PETA_CLI = path.join(__dirname, "..", "..", "..", "peta", "dist", "cli.js");
+const PETA_CLI = path.join(
+  __dirname,
+  "..",
+  "..",
+  "node_modules",
+  "@slexisvn",
+  "peta",
+  "dist",
+  "cli.js"
+);
 
 type Outcome = { status: number; stdout: string; stderr: string };
 

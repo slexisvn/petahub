@@ -30,14 +30,36 @@ import { Req } from "@nestjs/common";
 const STATE_COOKIE = "petahub_oauth_state";
 const STATE_MAX_AGE = 600;
 
-function cookie(name: string, value: string, maxAge: number): string {
+type CookieOptions = {
+  readonly sameSite?: "Lax" | "None";
+  readonly secure?: boolean;
+};
+
+function originOf(value: string): string | null {
+  try {
+    return new URL(value).origin;
+  } catch {
+    return null;
+  }
+}
+
+function sessionCookieOptions(config: HubConfig): CookieOptions {
+  const publicUrl = originOf(config.publicUrl);
+  const webUrl = originOf(config.webUrl);
+  const crossOrigin = publicUrl !== null && webUrl !== null && publicUrl !== webUrl;
+  const secure = config.publicUrl.startsWith("https://");
+  return crossOrigin && secure ? { sameSite: "None", secure: true } : {};
+}
+
+function cookie(name: string, value: string, maxAge: number, options: CookieOptions = {}): string {
   const parts = [
     `${name}=${encodeURIComponent(value)}`,
     "Path=/",
     "HttpOnly",
-    "SameSite=Lax",
+    `SameSite=${options.sameSite ?? "Lax"}`,
     `Max-Age=${maxAge}`
   ];
+  if (options.secure === true) parts.push("Secure");
   return parts.join("; ");
 }
 
@@ -73,7 +95,12 @@ export class AuthController {
     const session = await this.accounts.openSession(account.id);
     response.setHeader("Set-Cookie", [
       cookie(STATE_COOKIE, "", 0),
-      cookie(SESSION_COOKIE, session, this.config.sessionHours * 3600)
+      cookie(
+        SESSION_COOKIE,
+        session,
+        this.config.sessionHours * 3600,
+        sessionCookieOptions(this.config)
+      )
     ]);
     response.redirect(this.config.webUrl);
   }
@@ -82,7 +109,7 @@ export class AuthController {
   async logout(@Req() request: AuthenticatedRequest, @Res() response: Response): Promise<void> {
     const session = cookieFrom(request, SESSION_COOKIE);
     if (session !== null) await this.accounts.closeSession(session);
-    response.setHeader("Set-Cookie", cookie(SESSION_COOKIE, "", 0));
+    response.setHeader("Set-Cookie", cookie(SESSION_COOKIE, "", 0, sessionCookieOptions(this.config)));
     response.status(204).send();
   }
 
