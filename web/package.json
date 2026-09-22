@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@slexisvn/peta": "file:../../peta",
+    "@slexisvn/peta": "^0.1.1",
     "dompurify": "^3.2.0",
     "marked": "^16.0.0",
     "react": "^19.0.0",
