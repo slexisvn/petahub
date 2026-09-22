@@ -5,6 +5,10 @@ import express from "express";
 import { AppModule } from "./app.module";
 import { CONFIG, type HubConfig } from "./config/configuration";
 
+function originOf(value: string): string {
+  return new URL(value).origin;
+}
+
 export async function createServer() {
   const app = await NestFactory.create(AppModule, { bodyParser: true });
   const config = app.get<HubConfig>(CONFIG);
@@ -12,7 +16,7 @@ export async function createServer() {
     "/api/v1/publish",
     express.raw({ type: () => true, limit: MAX_ARCHIVE_BYTES })
   );
-  app.enableCors({ origin: config.webUrl, credentials: true });
+  app.enableCors({ origin: originOf(config.webUrl), credentials: true });
   return { app, config };
 }
 
