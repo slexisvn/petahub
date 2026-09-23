@@ -72,6 +72,8 @@ beforeAll(async () => {
   process.env["DATABASE_URL"] = `file:${path.join(root, "hub.db").split("\\").join("/")}`;
   process.env["STORAGE_ROOT"] = path.join(root, "storage");
   process.env["WEB_URL"] = "http://localhost:5173";
+  process.env["GITHUB_CLIENT_ID"] = "test-client";
+  process.env["GITHUB_CLIENT_SECRET"] = "test-secret";
 
   execFileSync("npx", ["prisma", "db", "push", "--skip-generate", "--accept-data-loss"], {
     cwd: path.join(__dirname, ".."),
@@ -332,6 +334,33 @@ describe("reading the registry", () => {
 });
 
 describe("identity", () => {
+  it("starts a CLI browser sign-in with a loopback redirect", async () => {
+    const response = await api()
+      .get("/api/v1/auth/github")
+      .query({
+        cli_redirect: "http://127.0.0.1:34567/peta-login",
+        cli_state: "abc12345"
+      })
+      .redirects(0);
+    expect(response.status).toBe(302);
+    expect(String(response.headers.location)).toContain("github.com/login/oauth/authorize");
+    const cookies = (response.headers["set-cookie"] as unknown as string[]).join("\n");
+    expect(decodeURIComponent(cookies)).toContain(
+      "petahub_cli_redirect=http://127.0.0.1:34567/peta-login"
+    );
+    expect(cookies).toContain("petahub_cli_state=abc12345");
+  });
+
+  it("refuses CLI sign-in redirects away from localhost", async () => {
+    const response = await api()
+      .get("/api/v1/auth/github")
+      .query({
+        cli_redirect: "https://example.com/callback",
+        cli_state: "abc12345"
+      });
+    expect(response.status).toBe(400);
+  });
+
   it("reports the account behind a token", async () => {
     const response = await api()
       .get("/api/v1/auth/whoami")

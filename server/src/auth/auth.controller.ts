@@ -28,6 +28,8 @@ import { GithubService } from "./github.service";
 import { Req } from "@nestjs/common";
 
 const STATE_COOKIE = "petahub_oauth_state";
+const CLI_REDIRECT_COOKIE = "petahub_cli_redirect";
+const CLI_STATE_COOKIE = "petahub_cli_state";
 const STATE_MAX_AGE = 600;
 
 type CookieOptions = {
@@ -63,6 +65,28 @@ function cookie(name: string, value: string, maxAge: number, options: CookieOpti
   return parts.join("; ");
 }
 
+function loopbackRedirect(value: string | undefined): string | null {
+  if (value === undefined || value.length === 0) return null;
+  let url: URL;
+  try {
+    url = new URL(value);
+  } catch {
+    return null;
+  }
+  const host = url.hostname.toLowerCase();
+  if (url.protocol !== "http:") return null;
+  if (host !== "localhost" && host !== "127.0.0.1" && host !== "[::1]" && host !== "::1") {
+    return null;
+  }
+  if (url.port.length === 0 || url.username.length > 0 || url.password.length > 0) return null;
+  return url.toString();
+}
+
+function cliState(value: string | undefined): string | null {
+  if (value === undefined || value.length < 8 || value.length > 128) return null;
+  return /^[A-Za-z0-9_-]+$/.test(value) ? value : null;
+}
+
 @Controller("api/v1/auth")
 export class AuthController {
   constructor(
@@ -73,9 +97,25 @@ export class AuthController {
   ) {}
 
   @Get("github")
-  start(@Res() response: Response): void {
+  start(
+    @Query("cli_redirect") cliRedirectValue: string | undefined,
+    @Query("cli_state") cliStateValue: string | undefined,
+    @Res() response: Response
+  ): void {
     const state = crypto.randomBytes(16).toString("base64url");
-    response.setHeader("Set-Cookie", cookie(STATE_COOKIE, state, STATE_MAX_AGE));
+    const cookies = [cookie(STATE_COOKIE, state, STATE_MAX_AGE)];
+    if (cliRedirectValue !== undefined || cliStateValue !== undefined) {
+      const redirect = loopbackRedirect(cliRedirectValue);
+      const stateValue = cliState(cliStateValue);
+      if (redirect === null || stateValue === null) {
+        throw new BadRequestException("CLI sign-in needs a localhost redirect and state");
+      }
+      cookies.push(
+        cookie(CLI_REDIRECT_COOKIE, redirect, STATE_MAX_AGE),
+        cookie(CLI_STATE_COOKIE, stateValue, STATE_MAX_AGE)
+      );
+    }
+    response.setHeader("Set-Cookie", cookies);
     response.redirect(this.github.authorizeUrl(state));
   }
 
@@ -93,7 +133,7 @@ export class AuthController {
     const identity = await this.github.identityFor(code);
     const account = await this.accounts.upsertFromGithub(identity);
     const session = await this.accounts.openSession(account.id);
-    response.setHeader("Set-Cookie", [
+    const cookies = [
       cookie(STATE_COOKIE, "", 0),
       cookie(
         SESSION_COOKIE,
@@ -101,7 +141,29 @@ export class AuthController {
         this.config.sessionHours * 3600,
         sessionCookieOptions(this.config)
       )
-    ]);
+    ];
+    const cliRedirect = cookieFrom(request, CLI_REDIRECT_COOKIE);
+    const cliStateValue = cookieFrom(request, CLI_STATE_COOKIE);
+    if (cliRedirect !== null || cliStateValue !== null) {
+      const redirect = loopbackRedirect(cliRedirect ?? undefined);
+      const stateValue = cliState(cliStateValue ?? undefined);
+      if (redirect === null || stateValue === null) {
+        throw new BadRequestException("the CLI sign-in request did not match; start again");
+      }
+      const issued = await this.accounts.issueToken(account.id, "peta CLI");
+      const target = new URL(redirect);
+      target.searchParams.set("state", stateValue);
+      target.searchParams.set("token", issued.secret);
+      target.searchParams.set("login", account.login);
+      cookies.push(
+        cookie(CLI_REDIRECT_COOKIE, "", 0),
+        cookie(CLI_STATE_COOKIE, "", 0)
+      );
+      response.setHeader("Set-Cookie", cookies);
+      response.redirect(target.toString());
+      return;
+    }
+    response.setHeader("Set-Cookie", cookies);
     response.redirect(this.config.webUrl);
   }
 
