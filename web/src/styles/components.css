@@ -447,11 +447,6 @@
   max-width: 34rem;
 }
 
-.hero__install {
-  margin: var(--space-4) auto 0;
-  max-width: 26rem;
-}
-
 .section {
   margin-top: var(--space-7);
 }

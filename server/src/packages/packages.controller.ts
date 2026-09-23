@@ -72,8 +72,9 @@ export class PackagesController {
   async search(@Query("q") query: string | undefined) {
     const where =
       query === undefined || query.length === 0
-        ? {}
+        ? { releases: { some: { yanked: false } } }
         : {
+            releases: { some: { yanked: false } },
             OR: [
               { name: { contains: query } },
               { description: { contains: query } }

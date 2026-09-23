@@ -5,7 +5,6 @@ import { messageOf, searchPackages } from "../api";
 import { EmptyState, SkeletonList } from "../components/Feedback";
 import { PackageHit } from "../components/PackageHit";
 import { SearchBox } from "../components/SearchBox";
-import { Snippet } from "../components/Snippet";
 import { useAsync } from "../hooks/useAsync";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { searchPath } from "../lib/routes";
@@ -23,7 +22,6 @@ export function HomePage(): JSX.Element {
   const recent = [...packages]
     .sort((left, right) => Date.parse(right.updatedAt) - Date.parse(left.updatedAt))
     .slice(0, RECENT_COUNT);
-  const featured = [...packages].sort((left, right) => right.downloads - left.downloads)[0];
 
   return (
     <div className="page">
@@ -50,15 +48,6 @@ export function HomePage(): JSX.Element {
             autoFocus
           />
         </form>
-        {featured === undefined ? null : (
-          <div className="hero__install">
-            <Snippet
-              text={`${CLIENT_NAME} install ${featured.name}`}
-              prompt="$"
-              label="install command"
-            />
-          </div>
-        )}
       </section>
 
       <section className="section" aria-labelledby="recent-heading">

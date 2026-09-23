@@ -263,6 +263,19 @@ describe("yanking", () => {
       .set("Authorization", `Bearer ${otherToken}`);
     expect(response.status).toBe(403);
   });
+
+  it("hides packages with no selectable release from search", async () => {
+    await publish(buildArchive({ name: "slexis.hidden", version: "1.0.0" }));
+    await api()
+      .post("/api/v1/packages/slexis.hidden/versions/1.0.0/yank")
+      .set("Authorization", `Bearer ${token}`);
+
+    const response = await api().get("/api/v1/packages?q=hidden");
+    expect(response.status).toBe(200);
+    expect(response.body.packages.map((entry: { name: string }) => entry.name)).not.toContain(
+      "slexis.hidden"
+    );
+  });
 });
 
 describe("reading the registry", () => {
